@@ -1,0 +1,7 @@
+gauguin.local {
+  gzip
+
+  proxy / gauguin-gin:5491 {
+    transparent
+  }
+}

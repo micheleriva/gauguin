@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  gin:
+    container_name: gauguin-gin
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 5491:5491
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+    networks:
+      - caddynet
+
+  caddy:
+    image: abiosoft/caddy
+    container_name: gauguin-caddy
+    cap_add:
+      - CAP_NET_BIND_SERVICE
+    ports:
+      - 5491:5491
+    expose:
+      - '5491'
+    links:
+      - gin
+    depends_on:
+      - gin
+    volumes:
+      - ./Caddyfile:/etc/Caddyfile
+    command: -conf /etc/Caddyfile
+    restart: always
+    networks:
+      - caddynet
+
+networks:
+  caddynet:
+    driver: bridge
