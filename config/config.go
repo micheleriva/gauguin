@@ -8,9 +8,15 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+var Config ConfigV001
+
 // GauguinConfigVersion is a struct containing just the version number of the Gauguin configuration
 type GauguinConfigVersion struct {
 	Version string `yaml:"version"`
+}
+
+func init() {
+	Config = ReadConfigFile()
 }
 
 // ReadConfigFile returns a parsed configuration file

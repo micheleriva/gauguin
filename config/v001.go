@@ -4,11 +4,11 @@ import "gopkg.in/yaml.v2"
 
 // ConfigV001 describes the V 0.0.1 configuration yaml
 type ConfigV001 struct {
-	Routes []ConfigV001Routes `yaml:"routes"`
+	Routes []ConfigV001Route `yaml:"routes"`
 }
 
 // ConfigV001Routes describes the V 0.0.1 configuration routes
-type ConfigV001Routes struct {
+type ConfigV001Route struct {
 	Path     string   `yaml:"path"`
 	Params   []string `yaml:"params"`
 	Size     string   `yaml:"size"`
