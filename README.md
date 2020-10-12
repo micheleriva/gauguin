@@ -2,6 +2,25 @@
 
 **Gauguin** (pronounced `/ˈɡoʊɡæ̃/`) is an high performances Golang server that generates dynamic **opengraph** images at runtime.
 
+# Getting started
+
+Clone this repository:
+```bash
+git clone https://github.com/micheleriva/gauguin.git
+```
+
+Create a `gauguin.yaml` file and add your [configuration](#configuration):
+```bash
+touch gauguin.yml
+```
+
+Now start the server:
+```bash
+GIN_MODE=release GAUGUIN_CONFIG=./gauguin.yaml PORT=8080 go run .
+```
+
+Now go to [http://localhost:8080](http://localhost:8080) and start to generate opengraph images!
+
 # Configuration
 **Gauguin** follows the configuration specified in `gauguin.yaml` file. Let's take the following file as an example:
 
@@ -32,8 +51,8 @@ with the above configuration, **Gauguin** will generate the following routes:
     - `author`
     - `imageurl`
 
-- `/user/opengraph`
-  Query parameters: <br />
+- `/user/opengraph` <br />
+  Query parameters:
     - `title`
     - `username`
     - `imageurl`
