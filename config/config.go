@@ -9,6 +9,7 @@ import (
 )
 
 var Config ConfigV001
+var ConfigError error
 
 // GauguinConfigVersion is a struct containing just the version number of the Gauguin configuration
 type GauguinConfigVersion struct {
@@ -16,14 +17,14 @@ type GauguinConfigVersion struct {
 }
 
 func init() {
-	Config = ReadConfigFile()
+	Config, ConfigError = ReadConfigFile()
 }
 
 // ReadConfigFile returns a parsed configuration file
-func ReadConfigFile() ConfigV001 {
+func ReadConfigFile() (ConfigV001, error) {
 	content, err := ioutil.ReadFile("gauguin.yaml")
 	if err != nil {
-		panic(err)
+		return ConfigV001{}, err
 	}
 
 	configVersion := getConfigVersion(content)
@@ -31,13 +32,13 @@ func ReadConfigFile() ConfigV001 {
 	// We want to support different versions in the future
 	switch configVersion.Version {
 	case "0.0.1":
-		return ReadV001Config(content)
+		return ReadV001Config(content), nil
 	default:
 		fmt.Printf("%s is not a valid version number", configVersion.Version)
 		os.Exit(1)
 	}
 
-	return ConfigV001{}
+	return ConfigV001{}, nil
 }
 
 func getConfigVersion(config []byte) GauguinConfigVersion {
@@ -49,8 +50,4 @@ func getConfigVersion(config []byte) GauguinConfigVersion {
 	}
 
 	return version
-}
-
-func main() {
-	fmt.Println(ReadConfigFile().Routes[0].Params)
 }

@@ -21,6 +21,21 @@ type ImageSize struct {
 	height float64
 }
 
+// ConfigError shows an error at frontend if configuration has some errors
+func ConfigError(c *gin.Context) {
+	c.Data(
+		http.StatusOK,
+		"text/html; charset=utf-8",
+		[]byte(`
+			<h1>Error</h1>
+			<p>
+				An error occurred while trying to read <b>Gauguin</b> configuration. <br />
+				You can find more useful information in your server logs.
+			</p>
+		`),
+	)
+}
+
 // HandleRoutes handles all the Gauguin routes
 func HandleRoutes(c *gin.Context) {
 	var err error
