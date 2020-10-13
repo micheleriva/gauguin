@@ -39,7 +39,7 @@ func takeScreenshot(res *[]byte, html string, width float64, height float64) chr
 
 			err = emulation.SetDeviceMetricsOverride(w, h, 1, false).
 				WithScreenOrientation(&emulation.ScreenOrientation{
-					Type:  emulation.OrientationTypePortraitPrimary,
+					Type:  emulation.OrientationTypeLandscapeSecondary,
 					Angle: 0,
 				}).
 				Do(ctx)

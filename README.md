@@ -16,7 +16,7 @@ touch gauguin.yml
 
 Now start the server:
 ```bash
-GIN_MODE=release GAUGUIN_CONFIG=./gauguin.yaml PORT=8080 go run .
+GIN_MODE=release PORT=8080 go run .
 ```
 
 Now go to [http://localhost:8080](http://localhost:8080) and start to generate opengraph images!

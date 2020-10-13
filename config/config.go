@@ -21,8 +21,7 @@ func init() {
 
 // ReadConfigFile returns a parsed configuration file
 func ReadConfigFile() ConfigV001 {
-	filePath := os.Getenv("GAUGUIN_CONFIG")
-	content, err := ioutil.ReadFile(filePath)
+	content, err := ioutil.ReadFile("gauguin.yaml")
 	if err != nil {
 		panic(err)
 	}

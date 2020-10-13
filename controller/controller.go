@@ -70,7 +70,11 @@ func getCurrentRouteConfig(c *gin.Context) config.ConfigV001Route {
 		}
 	}
 
-	panic(fmt.Sprintf("Cannot find path %s in configuration file", path))
+	c.JSON(http.StatusOK, gin.H{
+		"error": fmt.Sprintf("Cannot find path %s in configuration file", path),
+	})
+
+	return config.ConfigV001Route{}
 }
 
 func getImageSize(str string) ImageSize {
