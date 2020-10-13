@@ -11,6 +11,7 @@ import (
 
 	"github.com/chromedp/cdproto/emulation"
 	"github.com/chromedp/cdproto/page"
+	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
 	"github.com/go-resty/resty/v2"
 )
@@ -72,7 +73,18 @@ func GenerateImage(html string, width float64, height float64) []byte {
 func takeScreenshot(res *[]byte, html string, width float64, height float64) chromedp.Tasks {
 
 	return chromedp.Tasks{
-		chromedp.Navigate(fmt.Sprintf("data:text/html,%s", html)),
+		chromedp.Navigate(fmt.Sprintf("data:text/html,%s", `<div id="gauguin-root"></div>`)),
+		chromedp.ActionFunc(func(ctx context.Context) error {
+			_, exp, err := runtime.Evaluate(fmt.Sprintf("document.write(`%s`)", html)).Do(ctx)
+			if err != nil {
+				return err
+			}
+			if exp != nil {
+				return exp
+			}
+			return nil
+
+		}),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 
 			_, _, contentSize, err := page.GetLayoutMetrics().Do(ctx)
