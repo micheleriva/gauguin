@@ -4,8 +4,8 @@ ENV DOCKERIZED=true
 ENV GIN_MODE=release
 ENV PORT=5491
 
-RUN mkdir -p /gauguin
-WORKDIR /gauguin
+RUN mkdir -p /app
+WORKDIR /app
 
 COPY go.mod .
 COPY go.sum .
