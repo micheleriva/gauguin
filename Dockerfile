@@ -12,7 +12,7 @@ COPY go.sum .
 RUN go mod download
 
 COPY . .
-RUN go build -o ./gauguin
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./gauguin
 
 EXPOSE $PORT
 

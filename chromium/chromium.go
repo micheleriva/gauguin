@@ -27,15 +27,9 @@ type ChromeDevToolsVersion struct {
 }
 
 var isDockerized bool
-var chromeDevToolsWS string
 
 func init() {
 	isDockerized = os.Getenv("DOCKERIZED") == "true"
-
-	if isDockerized {
-		cdt := getCDTData()
-		chromeDevToolsWS = cdt.WebSocketDebuggerURL
-	}
 }
 
 func getCDTData() ChromeDevToolsVersion {
@@ -62,9 +56,10 @@ func getCDTData() ChromeDevToolsVersion {
 func GenerateImage(html string, width float64, height float64) []byte {
 	var buf []byte
 	var devToolWsURL string
+	chromeDevToolsWS := getCDTData()
 
 	if isDockerized {
-		flag.StringVar(&devToolWsURL, "devtools-ws-url", chromeDevToolsWS, "DevTools Websocket URL")
+		flag.StringVar(&devToolWsURL, "devtools-ws-url", chromeDevToolsWS.WebSocketDebuggerURL, "DevTools Websocket URL")
 		flag.Parse()
 	}
 
