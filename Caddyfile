@@ -1,7 +1,7 @@
-gauguin.local {
+local.gauguin.com:8181 {
   gzip
 
-  proxy / gauguin-gin:5491 {
+  proxy / gin_gonic:5491 {
     transparent
   }
 }

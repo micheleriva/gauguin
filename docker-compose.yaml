@@ -1,18 +1,33 @@
 version: '3.7'
 
 services:
-  gin:
-    container_name: gauguin-gin
+
+  alpine_chrome:
+    image: zenika/alpine-chrome:latest
+    container_name: gauguin-chrome-apline
+    command: [chromium-browser, "--headless", "--disable-gpu", "--no-sandbox", "--remote-debugging-address=0.0.0.0", "--remote-debugging-port=9222"]
+    ports:
+      - 9222:9222
+    restart: unless-stopped
+    networks:
+      - caddynet
+
+  gin_gonic:
+    container_name: gauguin-gin-gonic
     build:
       context: .
       dockerfile: ./Dockerfile
+    links:
+      - alpine_chrome
+    depends_on:
+      - alpine_chrome
     env_file:
       - .env
     ports:
       - 5491:5491
     volumes:
       - ./:/app
-    restart: unless-stopped
+    restart: always
     networks:
       - caddynet
 
@@ -22,13 +37,14 @@ services:
     cap_add:
       - CAP_NET_BIND_SERVICE
     ports:
-      - 5491:5491
+      - 8181:8181
     expose:
-      - '5491'
+      - '8181'
     links:
-      - gin
+      - gin_gonic
     depends_on:
-      - gin
+      - gin_gonic
+      - alpine_chrome
     volumes:
       - ./Caddyfile:/etc/Caddyfile
     command: -conf /etc/Caddyfile

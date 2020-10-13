@@ -2,23 +2,80 @@ package chromium
 
 import (
 	"context"
+	"encoding/json"
+	"flag"
 	"fmt"
+	"log"
 	"math"
+	"os"
+	"strings"
 
 	"github.com/chromedp/cdproto/emulation"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
+	"github.com/go-resty/resty/v2"
 )
+
+// ChromeDevToolsVersion describes the response of google devtool protocol
+type ChromeDevToolsVersion struct {
+	Browser              string `json:"browser"`
+	ProtocolVersion      string `json:"protocol-version"`
+	WebKitVersion        string `json:"WebKit-Version"`
+	V8Version            string `json:"V8-Version"`
+	UserAgent            string `json:"User-Agent"`
+	WebSocketDebuggerURL string `json:"webSocketDebuggerUrl"`
+}
+
+var isDockerized bool
+var chromeDevToolsWS string
+
+func init() {
+	isDockerized = os.Getenv("DOCKERIZED") == "true"
+
+	if isDockerized {
+		cdt := getCDTData()
+		chromeDevToolsWS = cdt.WebSocketDebuggerURL
+	}
+}
+
+func getCDTData() ChromeDevToolsVersion {
+	var CDTData ChromeDevToolsVersion
+
+	client := resty.New()
+
+	resp, err := client.R().SetHeader("HOST", "localhost").Get("http://alpine_chrome:9222/json/version")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = json.Unmarshal(resp.Body(), &CDTData)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	CDTData.WebSocketDebuggerURL = strings.Replace(CDTData.WebSocketDebuggerURL, "localhost", "alpine_chrome:9222", 1)
+
+	return CDTData
+}
 
 // GenerateImage returns a byte array representing the generated image
 func GenerateImage(html string, width float64, height float64) []byte {
 	var buf []byte
+	var devToolWsURL string
 
-	ctx, cancel := chromedp.NewContext(context.Background())
+	if isDockerized {
+		flag.StringVar(&devToolWsURL, "devtools-ws-url", chromeDevToolsWS, "DevTools Websocket URL")
+		flag.Parse()
+	}
+
+	allocatorCtx, cancel := chromedp.NewRemoteAllocator(context.Background(), devToolWsURL)
+	defer cancel()
+
+	ctx, cancel := chromedp.NewContext(allocatorCtx)
 	defer cancel()
 
 	if err := chromedp.Run(ctx, takeScreenshot(&buf, html, width, height)); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	return buf
