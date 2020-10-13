@@ -3,7 +3,6 @@ package chromium
 import (
 	"context"
 	"encoding/json"
-	"flag"
 	"fmt"
 	"log"
 	"math"
@@ -55,15 +54,9 @@ func getCDTData() ChromeDevToolsVersion {
 // GenerateImage returns a byte array representing the generated image
 func GenerateImage(html string, width float64, height float64) []byte {
 	var buf []byte
-	var devToolWsURL string
 	chromeDevToolsWS := getCDTData()
 
-	if isDockerized {
-		flag.StringVar(&devToolWsURL, "devtools-ws-url", chromeDevToolsWS.WebSocketDebuggerURL, "DevTools Websocket URL")
-		flag.Parse()
-	}
-
-	allocatorCtx, cancel := chromedp.NewRemoteAllocator(context.Background(), devToolWsURL)
+	allocatorCtx, cancel := chromedp.NewRemoteAllocator(context.Background(), chromeDevToolsWS.WebSocketDebuggerURL)
 	defer cancel()
 
 	ctx, cancel := chromedp.NewContext(allocatorCtx)
