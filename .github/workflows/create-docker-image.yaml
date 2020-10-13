@@ -1,0 +1,21 @@
+name: Create Docker Image
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Create Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: hakiebot
+          password: ${{ secrets.GH_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: micheleriva/gauguin/server
+          tag_with_ref: true
