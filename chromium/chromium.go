@@ -73,7 +73,7 @@ func GenerateImage(html string, width float64, height float64) []byte {
 func takeScreenshot(res *[]byte, html string, width float64, height float64) chromedp.Tasks {
 
 	return chromedp.Tasks{
-		chromedp.Navigate(fmt.Sprintf("data:text/html,%s", `<div id="gauguin-root"></div>`)),
+		chromedp.Navigate("data:text/html,"),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			_, exp, err := runtime.Evaluate(fmt.Sprintf("document.write(`%s`)", html)).Do(ctx)
 			if err != nil {
