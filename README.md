@@ -75,7 +75,7 @@ routes:
 5) Go to `http://localhost:5491/articles/test?author=Bojack%20Horseman&title=A%20Post%20About%20my%20Garden&imgUrl=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1525498128493-380d1990a112%3Fixlib%3Drb-1.2.1%26ixid%3DeyJhcHBfaWQiOjEyMDd9%26auto%3Dformat%26fit%3Dcrop%26w%3D300%26q%3D80&dev=true`
 6) Admire the following image:
 
-<img src="/assets/example.jpg" alt="Gauguin opengraph image example" />
+<img src="/assets/example.jpeg" alt="Gauguin opengraph image example" />
 
 # Documentation
 
