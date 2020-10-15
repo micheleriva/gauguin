@@ -4,19 +4,17 @@ services:
 
   alpine_chrome:
     image: zenika/alpine-chrome:latest
-    container_name: gauguin-chrome-apline
-    command: [chromium-browser, "--headless", "--disable-gpu", "--no-sandbox", "--remote-debugging-address=0.0.0.0", "--remote-debugging-port=9222"]
+    container_name: gauguin-chrome-alpine
+    command: [chromium-browser, "--headless", "--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage", "--remote-debugging-address=0.0.0.0", "--remote-debugging-port=9222"]
     ports:
       - 9222:9222
     restart: unless-stopped
     networks:
-      - caddynet
+      - gauguin_net
 
   gin_gonic:
     container_name: gauguin-gin-gonic
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: docker.pkg.github.com/micheleriva/gauguin/server:v0.0.4
     links:
       - alpine_chrome
     depends_on:
@@ -25,33 +23,15 @@ services:
       - .env
     ports:
       - 5491:5491
-    volumes:
-      - ./:/usr/src/app
-    restart: always
-    networks:
-      - caddynet
-
-  caddy:
-    image: abiosoft/caddy
-    container_name: gauguin-caddy
-    cap_add:
-      - CAP_NET_BIND_SERVICE
-    ports:
-      - 8181:8181
     expose:
-      - '8181'
-    links:
-      - gin_gonic
-    depends_on:
-      - gin_gonic
-      - alpine_chrome
+      - '5491'
     volumes:
-      - ./Caddyfile:/etc/Caddyfile
-    command: -conf /etc/Caddyfile
-    restart: always
+      - ./templates:/app/templates
+      - ./gauguin.yaml:/app/gauguin.yaml
+    restart: unless-stopped
     networks:
-      - caddynet
+      - gauguin_net
 
 networks:
-  caddynet:
+  gauguin_net:
     driver: bridge

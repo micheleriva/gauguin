@@ -2,81 +2,84 @@
 
 **Gauguin** (pronounced `/ˈɡoʊɡæ̃/`) is an high performances Golang server that generates dynamic **opengraph** images at runtime.
 
-# Getting started
+🎉 Read the quickstart post [here](https://www.hackdoor.io/articles/generate-dynamic-opengraph-images-using-gauguin-01d8592e58c0)!
 
-Clone this repository:
-```bash
-git clone https://github.com/micheleriva/gauguin.git
-```
+# Gauguin in 6 easy steps
 
-Create a `gauguin.yaml` file and add your [configuration](#configuration):
-```bash
-touch gauguin.yml
-```
+1) Create a configuration file called `gauguin.yaml`
 
-Now start the server:
-```bash
-GIN_MODE=release PORT=8080 go run .
-```
-
-Now go to [http://localhost:8080](http://localhost:8080) and start to generate opengraph images!
-
-# Configuration
-**Gauguin** follows the configuration specified in `gauguin.yaml` file. Let's take the following file as an example:
-
-```yaml
+```yml
 version: 0.0.1
 routes:
-  - path: /article/opengraph
+  - path: /articles/opengraph
     params:
       - title
       - author
-      - imageurl
+      - imgUrl
     size: 1200x630
-    template: ./templates/article/opengraph.tmpl
-  - path: /user/opengraph
+    template: ./templates/article.tmpl
+  - path: /author/opengraph
     params:
-      - title
       - username
-      - imageurl
+      - imgUrl
     size: 1200x630
-    template: ./templates/user/opengraph.tmpl
+    template: ./templates/user.tmpl
 ```
 
-with the above configuration, **Gauguin** will generate the following routes:
+2) For each route, create a Golang `tmpl` file (named the same way you named it inside the configuration file):
 
-- `/article/opengraph` <br />
-  Query parameters:
-    - `title`
-    - `author`
-    - `imageurl`
-
-- `/user/opengraph` <br />
-  Query parameters:
-    - `title`
-    - `username`
-    - `imageurl`
-
-# Templates
-As seen in the [configuration](#configuration) section, you can create a template for every route.
-
-A template is basically a Golang `.tmpl` file, for example:
-
-`./templates/article/opengraph.tmpl`
-```tmpl
+```html
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="/public/templates/articles/opengraph.css" rel="stylesheet" />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial;
+        color: #fff;
+      }
+      .article-template {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 1200px;
+        height: 630px;
+        background: #001f1c;
+      }
+      h1 {
+        margin: 0;
+        font-size: 32px;
+      }
+      img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 15px;
+        margin-bottom: 25px;
+      }
+    </style>
   </head>
-  <body style="background-image:url({{.imageurl}})">
-    <h1>{{.title}}</h1>
-    <p>{{.author}}</p>
+  <body>
+    <div class="article-template">
+      <img src="{{.imgUrl}}" />
+      <h1>{{.title}}</h1>
+      <p>Written by <b>{{.author}}</b></p>
+    </div>
   </body>
 </html>
 ```
 
-as you can see, at the moment all the CSS **must** be inline or external. I'm working hard on that.
+3) Copy [this](/docker-compose.yaml) docker-compose file locally and run `docker-compose up -d`
+4) Choose a title, an author and an image for your article opengraph image. Pass them via querystrng to the route you defined in your configuration file.
+5) Go to `http://localhost:5491/articles/test?author=Bojack%20Horseman&title=A%20Post%20About%20my%20Garden&imgUrl=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1525498128493-380d1990a112%3Fixlib%3Drb-1.2.1%26ixid%3DeyJhcHBfaWQiOjEyMDd9%26auto%3Dformat%26fit%3Dcrop%26w%3D300%26q%3D80&dev=true`
+6) Admire the following image:
+
+<img src="/assets/example.jpg" alt="Gauguin opengraph image example" />
+
+# Documentation
+
+I'm currently writing more documentation, it will be available on **Gitbook**: [http://micheleriva.gitbook.io/gauguin](http://micheleriva.gitbook.io/gauguin)
 
 # License
 **Gauguin** is distributed under the [GPLv3 open source license](/LICENSE.md).
