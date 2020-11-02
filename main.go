@@ -13,8 +13,10 @@ var router = gin.Default()
 
 func init() {
 	if config.ConfigError == nil {
+		// router.LoadHTMLGlob("editor/*")
 		router.Static("/public", "./public")
 		router.StaticFile("/favicon.ico", "./assets/favicon.ico")
+		// router.GET("/", editor.RenderEditor)
 		router.NoRoute(controller.HandleRoutes)
 	} else {
 		cwd, _ := os.Getwd()
