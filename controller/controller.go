@@ -2,9 +2,12 @@ package controller
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"text/template"
@@ -109,4 +112,35 @@ func getImageSize(str string) ImageSize {
 		width:  width,
 		height: height,
 	}
+}
+
+// RenderEditor - need more work on this
+func RenderEditor(c *gin.Context) {
+	content, err := ioutil.ReadFile("./editor/editor-webapp/build/index.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// perdoname madre por mi vida loca, PR welcome here
+	deleteDevEnvRegexp := regexp.MustCompile(`<script type="text\/javascript" id="dev-env">.+?<\/script>`)
+	htmlWithoutDevEnv := deleteDevEnvRegexp.ReplaceAllString(string(content), "")
+	addProdEnvRegexp := regexp.MustCompile(`<script type="text\/javascript" id="prod-env"><\/script>`)
+	htmlWithProdEnv := addProdEnvRegexp.ReplaceAllString(htmlWithoutDevEnv, createProdEnv())
+
+	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(htmlWithProdEnv))
+}
+
+func createProdEnv() string {
+	envVariable := `window.__env = "prod";`
+	envConfig := fmt.Sprintf("window.__gauguin_config = %s", getConfigObject())
+	return fmt.Sprintf("<script type='text/javascript'>\n%s\n%s\n</script>", envVariable, envConfig)
+}
+
+func getConfigObject() string {
+	conf, err := json.Marshal(config.Config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return string(conf)
 }

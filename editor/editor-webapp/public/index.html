@@ -9,13 +9,14 @@
       name="description"
       content="Web site created using create-react-app"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>React App</title>
+    <title>Gauguin Visual Editor</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <script type="text/javascript">
+    
+    <script type="text/javascript" id="prod-env"></script>
+    <script type="text/javascript" id="dev-env">
+      window.__env = "dev";
       // Configuration mock
       window.__gauguin_config = {
         "version": "0.0.1",
@@ -43,7 +44,7 @@
             "template": "./templates/user.tmpl"
           }
         ]
-      } 
+      };
     </script>
     <div id="root"></div>
   </body>

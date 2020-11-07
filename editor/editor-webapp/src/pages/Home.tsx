@@ -4,6 +4,11 @@ import csx from 'classnames';
 import Card from '../components/card';
 import { Button } from '../components/button';
 
+const homeContClasses = csx([
+  'grid', 'grid-cols-3',
+  'p-10', 'gap-10'
+]);
+
 const cardTitleClasses = csx([
   'font-bold', 'text-xl'
 ]);
@@ -18,7 +23,7 @@ const ctaClasses = [
 
 const Home = () => {
   return (
-    <div className='grid grid-cols-3 p-10 gap-10'>
+    <div className={homeContClasses}>
       <Card>
         <>
           <h2 className={cardTitleClasses}> Getting Started </h2>

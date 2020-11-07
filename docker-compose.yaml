@@ -14,7 +14,7 @@ services:
 
   gin_gonic:
     container_name: gauguin-gin-gonic
-    image: docker.pkg.github.com/micheleriva/gauguin/server:v0.0.4
+    image: micheleriva/gauguin:0.0.8
     links:
       - alpine_chrome
     depends_on:

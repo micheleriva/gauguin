@@ -1,6 +1,7 @@
 import * as React from 'react';
 import qs from 'querystring';
 import csx from 'classnames';
+import { isDev } from '../utils';
 import { DownloadButton, Button } from '../components/button';
 
 const contClasses = csx([
@@ -36,31 +37,42 @@ const selectClasses = csx([
   'focus:outline-none', 'focus:shadow-outline'
 ]);
 
+const selectChevronClasses = csx([
+  'pointer-events-none', 'absolute',
+  'inset-y-0', 'right-0', 'flex', 'items-center',
+  'px-2', 'text-gray-700'
+]);
+
 const Generate = () => {
   // @ts-ignore
   const config = window.__gauguin_config;
   const routes = config.routes;
-  const [route, setRoute] = React.useState(routes[1]);
+  const [route, setRoute] = React.useState(routes[0]);
 
   const [paramStates, setParamStates] = React.useState({})
   const handleSetParam = (event: React.ChangeEvent<HTMLInputElement>, param) =>
     setParamStates({ ...paramStates, [param]: event?.target?.value ?? '' })
 
   const queryString = qs.stringify(paramStates);
-  const imageUrl = `http://localhost:8080${route.path}?${queryString}`;
+  const imageUrl = `${isDev ? 'http://localhost:5491' : window.location.origin}${route.path}?${queryString}`;
 
   React.useEffect(() => {
     setParamStates({});
-  }, route.path);
+  }, [route.path]);
+
+  const handleTemplateChange = ({ target }) => {
+    const newTemplateIdx = routes.findIndex(({ name }) => name === target.value);
+    setRoute(routes[newTemplateIdx]);
+  }
 
   return (
-    <div className={contClasses} style={{ gridTemplateColumns: '450px 1fr' }}>
+    <div className={contClasses} style={{ gridTemplateColumns: '450px 1fr' }} key={route.name}>
       <div>
         <div className={selectContClasses}>
-          <select className={selectClasses} onChange={console.log}>
-            {routes.map((route) => <option key={route.name} value={route}> {route.name} </option>)}
+          <select className={selectClasses} value={route.name} onChange={handleTemplateChange}>
+            {routes.map((r) => <option key={r.name} value={r.name}> {r.name} </option>)}
           </select>
-          <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
+          <div className={selectChevronClasses}>
             <svg className='fill-current h-4 w-4' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/></svg>
           </div>
         </div>
@@ -91,7 +103,7 @@ const Generate = () => {
               </span>
             </Button>
           </a>
-          <a href={imageUrl} download={route.name} target='__blank'>
+          <a href={imageUrl} download>
             <DownloadButton />
           </a>
         </div>
@@ -100,7 +112,7 @@ const Generate = () => {
         <img
           src={imageUrl}
           style={{ width: '100%' }}
-          alt=''
+          alt={route.name}
         />
       </div>
     </div>
