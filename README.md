@@ -2,7 +2,6 @@
 
 <a href="https://www.producthunt.com/posts/gauguin?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-gauguin" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=276795&theme=dark" alt="Gauguin - Generate dynamic OpenGraph or social images in real-time | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54"  align="center"/></a>
 
-<br />
 **Gauguin** (pronounced `/ˈɡoʊɡæ̃/`) is an high performances Golang server that generates dynamic **opengraph** images at runtime.
 
 🎉 Read the quickstart post [here](https://www.hackdoor.io/articles/generate-dynamic-opengraph-images-using-gauguin-01d8592e58c0)!
