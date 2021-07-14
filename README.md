@@ -4,7 +4,7 @@
 
 **Gauguin** (pronounced `/ˈɡoʊɡæ̃/`) is an high performances Golang server that generates dynamic **opengraph** images at runtime.
 
-🎉 Read the quickstart post [here](https://www.hackdoor.io/articles/generate-dynamic-opengraph-images-using-gauguin-01d8592e58c0)!
+🎉 Read the quickstart post [here](https://levelup.gitconnected.com/generate-dynamic-opengraph-images-using-gauguin-b53c5dc8ec2f)!
 
 # Gauguin in 6 easy steps
 
