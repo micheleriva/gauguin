@@ -5,8 +5,7 @@ go 1.14
 require (
 	github.com/chromedp/cdproto v0.0.0-20201009231348-1c6a710e77de
 	github.com/chromedp/chromedp v0.5.3
-	github.com/gin-gonic/gin v1.6.3
-	github.com/go-playground/validator/v10 v10.4.0 // indirect
+	github.com/gin-gonic/gin v1.7.0
 	github.com/go-resty/resty/v2 v2.3.0
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
