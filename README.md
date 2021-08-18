@@ -6,6 +6,19 @@
 
 🎉 Read the quickstart post [here](https://levelup.gitconnected.com/generate-dynamic-opengraph-images-using-gauguin-b53c5dc8ec2f)!
 
+# Sponsors
+
+<div align="center">
+  <a href="https://graphcms.com?utm_source=https://github.com/micheleriva/krabs">
+    <img src="/assets/sponsor-graphcms.svg" alt="GraphCMS" target="_blank" width="250px" />
+  </a>
+
+  <br />
+  <a align="center" href="https://github.com/sponsors/micheleriva" target="_blank">
+    <b>Become a sponsor</b>
+  </a>
+</div>
+
 # Gauguin in 6 easy steps
 
 1) Create a configuration file called `gauguin.yaml`
