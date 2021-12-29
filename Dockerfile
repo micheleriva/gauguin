@@ -8,7 +8,7 @@ RUN go mod download
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./gauguin
 
-FROM golang:1.14.3-alpine
+FROM golang:1.17.5-alpine
 
 ENV DOCKERIZED=true
 ENV GIN_MODE=release
