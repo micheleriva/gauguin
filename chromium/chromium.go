@@ -27,9 +27,19 @@ type ChromeDevToolsVersion struct {
 }
 
 var isDockerized bool
+var chromeDevToolsURL string
 
 func init() {
 	isDockerized = os.Getenv("DOCKERIZED") == "true"
+	chromeURL := os.Getenv("CHROME_URL")
+
+	if isDockerized && chromeURL == "" {
+		chromeDevToolsURL = "http://alpine_chrome:9222/json/version"
+	} else if chromeURL != "" {
+		chromeDevToolsURL = chromeURL
+	} else {
+		chromeDevToolsURL = "http://localhost:9222/json/version"
+	}
 }
 
 func getCDTData() ChromeDevToolsVersion {
@@ -37,7 +47,7 @@ func getCDTData() ChromeDevToolsVersion {
 
 	client := resty.New()
 
-	resp, err := client.R().SetHeader("HOST", "localhost").Get("http://alpine_chrome:9222/json/version")
+	resp, err := client.R().SetHeader("HOST", "localhost").Get(chromeDevToolsURL)
 	if err != nil {
 		log.Fatal(err)
 	}

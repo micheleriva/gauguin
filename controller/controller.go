@@ -73,6 +73,7 @@ func HandleRoutes(c *gin.Context) {
 	image := chromium.GenerateImage(tpl.String(), sizes.width, sizes.height)
 	img := bytes.NewReader(image)
 
+	c.Header("Cache-Control", "max-age=604800")
 	c.Render(http.StatusOK, render.Reader{ContentType: "image/jpeg", ContentLength: int64(img.Len()), Reader: img})
 }
 

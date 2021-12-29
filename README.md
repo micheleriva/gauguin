@@ -96,5 +96,12 @@ routes:
 
 I'm currently writing more documentation, it will be available on **Gitbook**: [http://micheleriva.gitbook.io/gauguin](http://micheleriva.gitbook.io/gauguin)
 
+# Env Variables
+```env
+PORT=<number>         # HTTPS Port
+DOCKERIZED=<boolean>  # Set to true if running Gauguin in Docker
+CHROME_URL=<string>   # Optional, the URL of the Chrome REST Debugging APIs 
+```
+
 # License
 **Gauguin** is distributed under the [GPLv3 open source license](/LICENSE.md).
