@@ -95,6 +95,7 @@ func takeScreenshot(res *[]byte, html string, width float64, height float64) chr
 			return nil
 
 		}),
+		chromedp.WaitReady("body"),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 
 			_, _, contentSize, err := page.GetLayoutMetrics().Do(ctx)
