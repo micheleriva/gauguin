@@ -2,6 +2,7 @@ package controller
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -19,6 +20,15 @@ import (
 type ImageSize struct {
 	width  float64
 	height float64
+}
+
+type WebHook struct {
+	Action       string `json:"action"`
+	Route        string `json:"route"`
+	Template     string `json:"template"`
+	CacheControl string `json:"cache-control"`
+	Size         string `json:"size"`
+	Params       map[string]string `json:"params"`
 }
 
 // ConfigError shows an error at frontend if configuration has some errors
@@ -74,10 +84,20 @@ func HandleRoutes(c *gin.Context) {
 	image := chromium.GenerateImage(tpl.String(), sizes.width, sizes.height)
 	img := bytes.NewReader(image)
 
+	conf := config.Config
+
+	if conf.Hooks.BeforeResponse.Url != "" && !isDev {
+		callHook(conf.Hooks.BeforeResponse, "beforeResponse", route, params)
+	}
+
 	if route.CacheControl != "" {
 		c.Header("Cache-Control", fmt.Sprintf(route.CacheControl))
 	}
 	c.Render(http.StatusOK, render.Reader{ContentType: "image/jpeg", ContentLength: int64(img.Len()), Reader: img})
+
+	if conf.Hooks.AfterResponse.Url != "" && !isDev {
+		callHook(conf.Hooks.AfterResponse, "afterResponse", route, params)
+	}
 }
 
 func getCurrentRouteConfig(c *gin.Context) config.ConfigV001Route {
@@ -113,4 +133,38 @@ func getImageSize(str string) ImageSize {
 		width:  width,
 		height: height,
 	}
+}
+
+func callHook(hook config.ResponseHook, action string, confRoute config.ConfigV001Route, params map[string]string) {
+	client := &http.Client{}
+
+	body, _ := json.Marshal(WebHook{
+		Action: action,
+		Route: confRoute.Path,
+		Template: confRoute.Template,
+		CacheControl: confRoute.CacheControl,
+		Size: confRoute.Size,
+		Params: params,
+	})
+
+	responseBody := bytes.NewBuffer(body)
+	req, err := http.NewRequest("POST", hook.Url, responseBody)
+	if err != nil {
+		fmt.Printf("Unable to POST hook to %s. Reason: %s", hook.Url, err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	for _, header := range hook.Headers {
+		for k, v := range header {
+			req.Header.Set(k, v)
+		}
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Unable to POST hook to %s. Reason: %s", hook.Url, err)
+		return
+	}
+	fmt.Println(resp.Status)
 }
