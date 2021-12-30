@@ -70,6 +70,7 @@ func HandleRoutes(c *gin.Context) {
 	}
 
 	sizes := getImageSize(route.Size)
+
 	image := chromium.GenerateImage(tpl.String(), sizes.width, sizes.height)
 	img := bytes.NewReader(image)
 
