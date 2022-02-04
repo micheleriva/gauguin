@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -18,10 +19,8 @@ func init() {
 		router.NoRoute(controller.HandleRoutes)
 	} else {
 		cwd, _ := os.Getwd()
-		fmt.Println("An error occurred while trying to read Gauguin configuration:")
-		fmt.Println(config.ConfigError)
-		fmt.Println("We've tried to read the following configuration file:")
-		fmt.Println(fmt.Sprintf("%s/gauguin.yaml", cwd))
+		log.Printf("error occurred while trying to read Gauguin configuration: %v\n", config.ConfigError)
+		log.Printf("we've tried to read the following configuration file: %s\n", fmt.Sprintf("%s/gauguin.yaml", cwd))
 
 		router.NoRoute(controller.ConfigError)
 	}
