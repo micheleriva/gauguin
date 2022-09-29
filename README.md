@@ -85,8 +85,8 @@ For example, this would be our `article.tmpl`:
   </body>
 </html>
 ```
-3) Don't forget to create a file called `.env` and place there your [Env Variables](#Env-Variables).
-4) Now it's time to run `docker-compose up -d`, that will use [this](/docker-compose.yaml) docker-compose file.
+3) Don't forget to create a file called `.env` and place there your [Env Variables](#Env-Variables). In this case, port will be 5419, as specified in [this](/docker-compose.yaml) docker-compose file that we are going to use.
+4) Now it's time to run on terminal `docker-compose up -d`.
 5) Choose a title, an author and an image for your article opengraph image. Pass them via querystring to the route you defined in your configuration file.
 6) Go to `http://localhost:5491/articles/opengraph?author=Bojack%20Horseman&title=A%20Post%20About%20my%20Garden&imgUrl=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1525498128493-380d1990a112%3Fixlib%3Drb-1.2.1%26ixid%3DeyJhcHBfaWQiOjEyMDd9%26auto%3Dformat%26fit%3Dcrop%26w%3D300%26q%3D80`
 7) Admire the following image:
