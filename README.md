@@ -41,7 +41,8 @@ routes:
     template: ./templates/user.tmpl
 ```
 
-2) For each route, create a Golang `tmpl` file (named the same way you named it inside the configuration file):
+2) For each route, create a Golang `tmpl` file (named the same way you named it inside the configuration file).\
+For example, this would be our `article.tmpl`:
 
 ```html
 <!DOCTYPE html>
@@ -84,11 +85,11 @@ routes:
   </body>
 </html>
 ```
-
-3) Copy [this](/docker-compose.yaml) docker-compose file locally and run `docker-compose up -d`
-4) Choose a title, an author and an image for your article opengraph image. Pass them via querystrng to the route you defined in your configuration file.
-5) Go to `http://localhost:5491/articles/opengraph?author=Bojack%20Horseman&title=A%20Post%20About%20my%20Garden&imgUrl=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1525498128493-380d1990a112%3Fixlib%3Drb-1.2.1%26ixid%3DeyJhcHBfaWQiOjEyMDd9%26auto%3Dformat%26fit%3Dcrop%26w%3D300%26q%3D80`
-6) Admire the following image:
+3) Don't forget to create a file called `.env` and place there your [Env Variables](#Env-Variables). In this case, port will be 5419, as specified in [this](/docker-compose.yaml) docker-compose file that we are going to use.
+4) Now it's time to run on terminal `docker-compose up -d`.
+5) Choose a title, an author and an image for your article opengraph image. Pass them via querystring to the route you defined in your configuration file.
+6) Go to `http://localhost:5491/articles/opengraph?author=Bojack%20Horseman&title=A%20Post%20About%20my%20Garden&imgUrl=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1525498128493-380d1990a112%3Fixlib%3Drb-1.2.1%26ixid%3DeyJhcHBfaWQiOjEyMDd9%26auto%3Dformat%26fit%3Dcrop%26w%3D300%26q%3D80`
+7) Admire the following image:
 
 <img src="/assets/example.jpeg" alt="Gauguin opengraph image example" />
 
