@@ -41,7 +41,7 @@ routes:
     template: ./templates/user.tmpl
 ```
 
-2) For each route, create a Golang `tmpl` file (named the same way you named it inside the configuration file). 
+2) For each route, create a Golang `tmpl` file (named the same way you named it inside the configuration file).\
 For example, this would be our `article.tmpl`:
 
 ```html
